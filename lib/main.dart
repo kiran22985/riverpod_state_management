@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod_state_management/screens/auto_dispode_demo/first_screen.dart';
 
 final nameProvider = Provider<String>((ref) {
   return 'Hello kiran';
@@ -17,17 +19,27 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
       darkTheme: ThemeData.dark(),
-      home: const HomePage(),
+      //home: const HomePage(),
+    routerConfig: _router,
+      
     );
   }
 }
+
+final GoRouter _router = GoRouter(routes: [
+  GoRoute(path: '/', builder: (context, state)=> const FirstPage(),
+  
+  ),
+  GoRoute(path: 'second', builder:(context, state)=> const  )
+
+]);
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
