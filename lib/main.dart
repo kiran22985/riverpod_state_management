@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_state_management/screens/auto_dispode_demo/first_screen.dart';
+import 'package:riverpod_state_management/screens/auto_dispode_demo/second_screen.dart';
 
 final nameProvider = Provider<String>((ref) {
   return 'Hello kiran';
 });
-final counterProvider = StateProvider<int>((ref) {
+
+final counterStateProvider = StateProvider<int>((ref) {
   return 0;
 });
+
 void main() {
   runApp(const ProviderScope(child: MyApp()));
 }
@@ -27,18 +30,17 @@ class MyApp extends StatelessWidget {
       ),
       darkTheme: ThemeData.dark(),
       //home: const HomePage(),
-    routerConfig: _router,
-      
+      routerConfig: _router,
     );
   }
 }
 
 final GoRouter _router = GoRouter(routes: [
-  GoRoute(path: '/', builder: (context, state)=> const FirstPage(),
-  
+  GoRoute(
+    path: '/',
+    builder: (context, state) => const FirstPage(),
   ),
-  GoRoute(path: 'second', builder:(context, state)=> const  )
-
+  GoRoute(path: 'second', builder: (context, state) => const SecondPage())
 ]);
 
 class HomePage extends ConsumerWidget {
@@ -85,7 +87,7 @@ class _MyHomeDemoState extends ConsumerState<MyHomeDemo> {
   void initState() {
     super.initState();
     final name = ref.read(nameProvider); //reading provider in initSate
-    print(name);
+    debugPrint(name);
   }
 
   @override
@@ -109,9 +111,9 @@ class CounterTest extends ConsumerStatefulWidget {
 class _CounterTestState extends ConsumerState<CounterTest> {
   @override
   Widget build(BuildContext context) {
-    final count = ref.watch(counterProvider);
+    final count = ref.watch(counterStateProvider);
 //listening the provider.
-    ref.listen(counterProvider, (previous, next) {
+    ref.listen(counterStateProvider, (previous, next) {
       if (next == 5) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('The value is $next')));
@@ -122,8 +124,8 @@ class _CounterTestState extends ConsumerState<CounterTest> {
         actions: [
           IconButton(
               onPressed: () {
-                ref.invalidate(counterProvider);
-                //ref.refresh(counterProvider);
+                ref.invalidate(counterStateProvider);
+                //ref.refresh(counterStateProvider);
               },
               icon: const Icon(Icons.refresh))
         ],
@@ -133,8 +135,8 @@ class _CounterTestState extends ConsumerState<CounterTest> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          ref.read(counterProvider.notifier).update((state) => state++);
-          //ref.read(counterProvider.notifier).state++;
+          ref.read(counterStateProvider.notifier).update((state) => state++);
+          //ref.read(counterStateProvider.notifier).state++;
         },
         child: const Icon(Icons.add),
       ),
